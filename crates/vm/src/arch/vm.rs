@@ -1,10 +1,10 @@
 use std::{
     borrow::Borrow,
     collections::{HashMap, VecDeque},
+    fmt::{Display, Formatter},
     marker::PhantomData,
     mem,
     sync::Arc,
-    fmt::{Display, Formatter},
 };
 
 use bincode::serialized_size;
@@ -879,11 +879,17 @@ pub struct ContinuationVmProof<SC: StarkGenericConfig> {
 
 impl<SC: StarkGenericConfig> Display for ContinuationVmProof<SC> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "ContinuationVmProof with {} segments", self.per_segment.len())?;
+        writeln!(
+            f,
+            "ContinuationVmProof with {} segments",
+            self.per_segment.len()
+        )?;
         for (i, segment) in self.per_segment.iter().enumerate() {
             let ov_size = serialized_size(&segment.opening.values).unwrap();
             let pcs_proof_size = serialized_size(&segment.opening.proof).unwrap();
-            writeln!(f, "Segment {}: size = {}, ov.size = {} ({}k), pcs proof size = {} ({}k)", 
+            writeln!(
+                f,
+                "Segment {}: size = {}, ov.size = {} ({}k), pcs proof size = {} ({}k)",
                 i,
                 serialized_size(segment).unwrap(),
                 ov_size,
